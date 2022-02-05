@@ -7,53 +7,115 @@
     <title>계정 만들기</title>
 </head>
 <body>
-    <div class="form_main">
-        <div class="form_title">
-            마이 페이지 만들 거임
+    <div class="header">
+        <div class="none">
+            <div class="profile"></div>
+            <div class="name"><%= name %>님, 오늘도 파이팅!</div>
         </div>
-        <br />
-        <a href="/logout" class="already">
-            로그아웃
-        </a>
+        <div class="menu"></div>
+    </div>
+    <div class="content">
+        <div class="box a10">검색부분</div>
+        <div class="box a10">북마크</div>
+        <div class="box a10">글 쓰러 가는 부분</div>
+        <div class="box a50">인기 글 목록 쭉</div>
+        <div class="box a50">과목별로 보기 1</div>
+        <div class="box a50">과목별로 보기 2</div>
+        <div class="box a50">과목별로 보기 3</div>
     </div>
 </body>
 </html>
 
 <style>
 
-    .already {
-        font-size: 15px;
-        color: gray;
-        text-decoration: none;
-        line-height: 20px;
-    }
-
     div {
         box-sizing: border-box;
+    }
+
+    .none {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
     }
 
     body {
         margin: 0;
         display: flex;
-        align-items: center;
-        justify-content: center;
+        justify-content: space-between;
+        flex-direction: column;
         background-color: rgb(245, 245, 245);
         position: absolute;
         width: 100%;
         height: 100%;
+        margin-bottom: 100px;
+        overflow: scroll;
     }
 
-    .form_main {
+    .header {
         display: flex;
+        padding: 15px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        position: sticky;
+        top: 0px;
+        z-index: 9999;
         justify-content: space-between;
+        background-color: rgb(245, 245, 245);
+    }
+
+    .profile {
+        width: 45px;
+        height: 45px;
+        border-radius: 100px;
+        background-image: url("/images/profile.png");
+        background-repeat: no-repeat;
+        background-size: 100%;
+        background-position: 5% center;
+        margin-right: 12px;
+        border: 1px solid gray;
+        margin-left: 10px;
+        background-color: white;
+    }
+
+    .menu {
+        width: 35px;
+        height: 35px;
+        background-image: url("/images/menu.png");
+        background-repeat: no-repeat;
+        background-size: 100%;
+        margin-right: 10px;
+    }
+
+    .name {
+        font-size: 19px;
+    }
+
+    .content {
+        margin-left: 20px;
+        margin-right: 20px;
+        display: flex;
         flex-direction: column;
+    }
+
+    .box {
+        background-color: white;
+        display: flex;
+        width: 100%;
+        border: 1px solid rgb(230, 230, 230);
+        border-radius: 20px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        justify-content: center;
         align-items: center;
     }
 
-    .form_title {
-        display: flex;
-        font-weight: 600;
-        font-size: 26px;
+    .a10 {
+        height: 65px;
     }
 
-</style>
+    .a50 {
+        height: 300px;
+    }
+
+</style> 
