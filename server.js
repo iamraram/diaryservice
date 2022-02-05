@@ -83,10 +83,10 @@ app.post('/login', passport.authenticate('local', {failureRedirect : '/fail'}), 
 
 function islogin2(req, res, next) {
     if (req.user) {
-        next()
+        res.render('already.ejs');
     }
     else {
-        res.render('already.ejs');
+        next()
     }
 }
 
@@ -105,7 +105,7 @@ function islogin(req, res, next) {
         next()
     }
     else {
-        res.send('로그인을 안 함')
+        res.render('404.ejs')
     }
 }
   
