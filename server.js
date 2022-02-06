@@ -69,7 +69,14 @@ app.post('/signup', function (req, res) {
                         pw: req.body.pw,
                         name: req.body.name,
                         school: req.body.school,
-                        age: req.body.age
+                        age: req.body.age,
+                        dark: false,
+                        blacklist: false,
+                        write_post: [],
+                        like_post: [],
+                        like_book: [],
+                        write_comment: [],
+                        like_comment: []
                     },
             
                     function (err, result) {
@@ -113,8 +120,49 @@ app.get('/logout', function(req, res){
     res.render('logout.ejs');
 });
 
+app.get('/menu', function(req, res){
+    res.render('menu.ejs');
+});
+
+app.get('/exit', islogin, function(req, res){
+    res.render('exit.ejs');
+});
+
+app.get('/exitsuccess', islogin, function(req, res){
+    res.render('exitsuccess.ejs');
+});
+
+app.get('/search', islogin, function(req, res){
+    res.render('search.ejs');
+});
+
+app.get('/edit', islogin, function(req, res){
+    db.collection('user').findOne({ id: req.user.id }, function(err, result) {
+
+        const name = result.name;
+        const id = result.id;
+        const pw = '';
+        const age = result.age;
+        const school = result.school;
+
+        for (i = 0; i < pw.length, i ++;) {
+            pw += '*'
+            console.log('*')
+        }
+
+        res.render('edit.ejs', {
+            name: name,
+            id: id,
+            age: age,
+            school: school,
+            pw: pw
+        });
+    });
+});
+
+
 app.get('/mypage', islogin, function (req, res) {
-    db.collection('user').findOne(function(err, result) {
+    db.collection('user').findOne({ id: req.user.id }, function(err, result) {
         const name = result.name;
         const id = result.id;
         const age = result.age;
@@ -176,7 +224,7 @@ passport.deserializeUser(function (input_id, done) {
     })
 }); 
 
-app.get('/:id', islogin2, function(req, res){
+app.get('/:id', function(req, res){
     res.render('unknown.ejs')
 });
   

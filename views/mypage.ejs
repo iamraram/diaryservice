@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="kr">
+    
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>계정 만들기</title>
+    <title>HOME</title>
 </head>
 <body>
     <div class="header">
@@ -12,21 +13,168 @@
             <div class="profile"></div>
             <div class="name"><%= name %>님, 오늘도 파이팅!</div>
         </div>
-        <div class="menu"></div>
+        <a href="/menu">
+            <div class="menu">
+            </div>
+        </a>
     </div>
     <div class="content">
-        <div class="box a10">검색부분</div>
-        <div class="box a10">북마크</div>
-        <div class="box a10">글 쓰러 가는 부분</div>
-        <div class="box a50">인기 글 목록 쭉</div>
-        <div class="box a50">과목별로 보기 1</div>
-        <div class="box a50">과목별로 보기 2</div>
-        <div class="box a50">과목별로 보기 3</div>
+        <a href="/search">
+            <div class="box a10">
+                <div class="search_pen imgs2"></div>
+                <div class="write_text">포스트 찾아보기</div>
+            </div>
+        </a>
+
+        <div class="box a50">
+            <div class="a50_items titles">
+                <div class="a50_title">
+                    가장 인기있는 포스트
+                </div>
+                <div class="a50_subtitle">
+                </div>
+            </div>
+
+            <% for(var i = 0; i < 6; i++){ %>
+                <div class="a50_items">
+                    <div class="a50_post">
+                        이게 제목이고 책 추천
+                    </div>
+                    <div class="a50_writer">
+                        글쓴이는 라람
+                    </div>
+                </div>
+            <% } %>
+            
+        </div>
+
+        <div class="box a50">
+            <div class="a50_items titles">
+                <div class="a50_title">
+                    최신 포스트
+                </div>
+                <div class="a50_subtitle">
+                </div>
+            </div>
+
+            <% for(var i = 0; i < 6; i++){ %>
+                <div class="a50_items">
+                    <div class="a50_post">
+                        어쩔티비저쩔티비
+                    </div>
+                    <div class="a50_writer">
+                        집게 사장님
+                    </div>
+                </div>
+            <% } %>
+            
+        </div>
+
+        <div class="box a50 last">
+            <div class="a50_items titles">
+                <div class="a50_title">
+                    내 나이대 친구들이 즐겨보는 책
+                </div>
+                <div class="a50_subtitle">
+                </div>
+            </div>
+
+            <% for(var i = 0; i < 6; i++){ %>
+                <div class="a50_items">
+                    <div class="a50_post">
+                        고등학교 수학 책 추천
+                    </div>
+                    <div class="a50_writer">
+                        유재석
+                    </div>
+                </div>
+            <% } %>
+            
+        </div>
     </div>
 </body>
 </html>
 
 <style>
+
+    @import url(https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css);
+
+    body {
+        font-family: 나눔스퀘어, 'NanumSquare', sans-serif; 
+    }
+
+
+    .titles {
+        margin-bottom: 12px;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    .a50_items {
+        display: flex;
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .a50_writer {
+        color: gray;
+    }
+
+    .a50_title {
+        font-weight: 600;
+        font-size: 17.5px;
+        align-items: center;
+    }
+
+    .a50_subtitle {
+        display: flex;
+        font-weight: 400;
+        font-size: 14px;
+        color: rgb(180, 180, 180);
+        background-image: url("/images/back.png");
+        background-repeat: no-repeat;
+        background-size: 80%;
+        background-position: center;
+        width: 15px;
+        height: 15px;
+        transform: rotateY(180deg);
+        opacity: 0.5;
+
+    }
+
+    .search_pen {
+        width: 30px;
+        height: 30px;
+        background-image: url("/images/search.png");
+    }
+
+    .bookmark_pen {
+        width: 25px;
+        height: 25px;
+        background-image: url("/images/bookmark.png");
+    }
+
+    .imgs2 {
+        background-repeat: no-repeat;
+        background-size: 100%;
+        background-position: 5% center;
+        margin-right: 15px;
+        opacity: 0.5;
+    }
+
+    .write_pen {
+        width: 30px;
+        height: 30px;
+        background-image: url("/images/pen.png");
+    }
+
+    .write_text {
+        font-size: 18px;
+    }
 
     div {
         box-sizing: border-box;
@@ -41,7 +189,7 @@
     body {
         margin: 0;
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-start;
         flex-direction: column;
         background-color: rgb(245, 245, 245);
         position: absolute;
@@ -54,7 +202,6 @@
     .header {
         display: flex;
         padding: 15px;
-        display: flex;
         flex-direction: row;
         align-items: center;
         position: sticky;
@@ -89,6 +236,7 @@
 
     .name {
         font-size: 19px;
+        font-weight: 600;
     }
 
     .content {
@@ -112,10 +260,23 @@
 
     .a10 {
         height: 65px;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        padding-left: 20px;
+        color: rgb(120, 120, 120);
     }
 
     .a50 {
         height: 300px;
+        justify-content: space-between;
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .last {
+        margin-bottom: 50px;
     }
 
 </style> 

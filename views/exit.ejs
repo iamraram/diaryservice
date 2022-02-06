@@ -9,11 +9,15 @@
 <body>
     <div class="form_main">
         <div class="form_title">
-            <%= names %>님, 안녕하세요!
+            탈퇴시 정보 복원은 불가능해요.
         </div>
         <br />
-        <a href="/mypage" class="already">
-            마이페이지로 이동하기
+        <a href="/exitsuccess" class="already" onclick="exit()">
+            알겠어요
+        </a>
+        <br />
+        <a href="/menu" class="already">
+            탈퇴 안 할래요
         </a>
     </div>
 </body>
@@ -31,6 +35,7 @@
         font-size: 15px;
         color: gray;
         text-decoration: none;
+        line-height: 20px;
     }
 
     div {
