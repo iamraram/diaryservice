@@ -5,6 +5,9 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const session = require('express-session');
 
+const axios = require("axios");
+const cheerio = require("cheerio");
+
 const app = express();
 
 app.use(session({secret : '비밀코드', resave : true, saveUninitialized: false}));
@@ -136,8 +139,91 @@ app.get('/search', islogin, function(req, res){
     res.render('search.ejs');
 });
 
+app.get('/most-like-post', islogin, function(req, res){
+    res.render('most-like-post.ejs');
+});
+
+app.get('/write-post', islogin, function(req, res){
+    res.render('write-post.ejs');
+});
+
+app.post('/write-post', function(req, res){
+
+    const getHtml = async () => {
+        try {
+            return await axios.get("https://www.aladin.co.kr/search/wsearchresult.aspx?SearchTarget=All&SearchWord=" + encodeURI(req.body.b_name));
+        }
+        catch (error) {
+             console.error(error);
+        }
+      };
+      
+      getHtml()
+            .then(html => {
+                let ulList = [];
+                const $ = cheerio.load(html.data);
+                const $bodyList = $("div#keyword_wrap")
+                                    .children("table")
+                                    .children("tbody")
+                                    .children("tr")
+                                    .children("td")
+                                    .children("form#Myform")
+
+                                    .children("div#Search3_Result")
+                                    .children("div.ss_book_box")
+
+                                    .children("table")
+                                    .children("tbody")
+                                    .children("tr")
+
+            $bodyList.each(function(i, elem) {
+                ulList[i] = {
+
+                    title: $(this).find(
+                        'td table tbody tr td div.ss_book_list ul li a.bo3 b'
+                    ).text(),
+
+                    image_url: $(this).find(
+                        'td table tbody tr td div a img.i_cover'
+                    ).attr('src'),
+            };
+        });
+      
+          const data = ulList.filter(n => n.title);
+          return data;
+        })
+        .then(result => {
+
+            console.log(result)
+            
+            let lengths = result.length
+
+            if (result.length < 10) {
+                lengths == result.length
+            }
+            else if (result.length >= 10) {
+                lengths == 10
+            }
+
+            console.log(lengths)
+
+            res.render('find-book.ejs', {
+                data: result,
+                title: req.body.posttitle,
+                b_name: req.body.b_name,
+                len: lengths
+            });
+
+        });
+});
+
 app.get('/edit', islogin, function(req, res){
-    db.collection('user').findOne({ id: req.user.id }, function(err, result) {
+
+    db.collection('user').findOne({
+        id: req.user.id
+    },
+
+    function(err, result) {
 
         const name = result.name;
         const id = result.id;
@@ -145,7 +231,7 @@ app.get('/edit', islogin, function(req, res){
         const age = result.age;
         const school = result.school;
 
-        for (i = 0; i < pw.length, i ++;) {
+        for (i = 0; i < (result.pw).length, i ++;) {
             pw += '*'
             console.log('*')
         }

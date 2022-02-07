@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOME</title>
+</head>
+<body>
+    <div class="header">
+        <div class="none">
+            <a href="/write-post">
+                <div class="profile"></div>
+            </a>
+            <div class="name">책 검색하기</div>
+        </div>
+    </div>
+    <div class="content">
+        <form action="/write-post" method="POST" name="frm">
+
+            <div class="box a10">
+                <div class="write_text">글 제목</div>
+                <input type="text" placeholder="글 제목을 입력해주세요" value="<%= title %>"/>
+            </div>
+
+            <div class="box a10">
+                <div class="write_text">추천 책</div>
+                <input type="text" placeholder="클릭하면 검색합니다" name="bookname" value="<%= b_name %>">
+            </div>
+
+            <br />
+
+            <div class="box a100">
+                <% for(var i = 0; i < len; i ++){ %>
+                    <div class="book_item">
+                        <div class="book_photo">
+                            <img src="<%= data[i].image_url %>" class="photo"></img>
+                        </div>
+                        <div class="book_title">
+                            <%= data[i].title %>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+
+
+            <div class="al">
+                검색결과가 나오지 않을 경우 구체적으로 검색해보세요.
+            </div>
+
+            <a href="/write-post">
+                <button class="buttons box a5" type="button">다시 검색하기</button>
+            </a>
+            <button class="buttons box a5 last" type="submit">선택하기</button>
+
+        </form>
+
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+    </div>
+
+    <!-- <div class="modal">
+        <div class="modal_parent">
+            <div class="modal_child">
+                
+            </div>
+        </div>
+    </div> -->
+</body>
+</html>
+
+<style>
+
+    @import url(https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css);
+
+    body {
+        font-family: 나눔스퀘어, 'NanumSquare', sans-serif; 
+    }
+
+    .al {
+        width: 100%;
+        justify-content: center;
+        display: flex;
+        font-size: 14px;
+        color: gray;
+        margin-top: 25px;
+        margin-bottom: 25px;
+    }
+
+    .book_photo {
+        display: flex;
+        width: 100px;
+        margin-right: 20px;
+    }
+
+    .photo {
+        width: 80px;
+    }
+
+    .book_item {
+        width: 100%;
+        border-bottom: 1px solid rgb(220, 220, 220);
+        margin-top: 10px;
+        margin-bottom: 10px;
+        padding-bottom: 20px;
+        line-height: 28px;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+    }
+
+    .book_item:nth-last-child(1) {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .modal {
+        /* display: none; */
+    }
+
+
+    .modal_parent {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        bottom: 0;
+        z-index: 99999;
+        background-color: rgb(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal_child {
+        width: 90%;
+        height: 520px;
+        background-color: white;
+        border-radius: 20px;
+        border: 1px solid rgb(220, 220, 220)
+    }
+
+    input::placeholder {
+        color: rgb(200, 200, 200);
+        font-family: 나눔스퀘어, 'NanumSquare', sans-serif; 
+    }
+
+    input:focus {
+        outline: none;
+    }
+
+    input {
+        font-family: 나눔스퀘어, 'NanumSquare', sans-serif; 
+        border: 0;
+        font-size: 17px;
+        position: relative;
+        bottom: 1px;
+        width: 220px;
+        position: relative;
+        top: 0.5px;
+    }
+
+    .search_pen {
+        width: 30px;
+        height: 30px;
+        background-image: url("/images/search.png");
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    .bookmark_pen {
+        width: 25px;
+        height: 25px;
+        background-image: url("/images/bookmark.png");
+    }
+
+    .bookmark_pen2 {
+        width: 27px;
+        height: 27px;
+        background-image: url("/images/like.png");
+    }
+
+    .night_pen {
+        width: 30px;
+        height: 30px;
+        background-image: url("/images/night.png");
+    }
+
+    .user_pen {
+        width: 27px;
+        height: 27px;
+        background-image: url("/images/user.png");
+    }
+
+    .lock_pen {
+        width: 27px;
+        height: 27px;
+        background-image: url("/images/lock.png");
+    }
+
+    .out_pen {
+        width: 26px;
+        height: 26px;
+        background-image: url("/images/x.png");
+        position: relative;
+        bottom: 1px;
+    }
+
+    .imgs2 {
+        background-repeat: no-repeat;
+        background-size: 100%;
+        background-position: 5% center;
+        margin-right: 15px;
+        opacity: 0.5;
+    }
+
+    .write_pen {
+        width: 30px;
+        height: 30px;
+        background-image: url("/images/pen.png");
+    }
+
+    .write_text {
+        font-size: 18px;
+        width: 70px;
+    }
+
+    div {
+        box-sizing: border-box;
+    }
+
+    .none {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    body {
+        margin: 0;
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: column;
+        background-color: rgb(245, 245, 245);
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        margin-bottom: 100px;
+        overflow: scroll;
+    }
+
+    .header {
+        display: flex;
+        padding: 15px;
+        flex-direction: row;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        z-index: 9999;
+        justify-content: space-between;
+        background-color: rgb(245, 245, 245);
+        width: 100%;
+    }
+
+    .profile {
+        width: 45px;
+        height: 45px;
+        border-radius: 100px;
+        background-image: url("/images/back.png");
+        background-repeat: no-repeat;
+        background-size: 50%;
+        background-position: 5% center;
+        margin-right: 12px;
+        margin-left: 10px;
+    }
+
+    .menu {
+        width: 35px;
+        height: 35px;
+        background-image: url("/images/menu.png");
+        background-repeat: no-repeat;
+        background-size: 100%;
+        margin-right: 10px;
+    }
+
+    .name {
+        font-size: 19px;
+        font-weight: 600;
+    }
+
+    .content {
+        margin-left: 20px;
+        margin-right: 20px;
+        display: flex;
+        flex-direction: column;
+        margin-top: 75px;
+    }
+
+    .box {
+        background-color: white;
+        display: flex;
+        width: 100%;
+        border: 1px solid rgb(230, 230, 230);
+        border-radius: 20px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .a10 {
+        height: 65px;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        padding-left: 20px;
+        color: rgb(120, 120, 120);
+    }
+
+    .a5 {
+        height: 65px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        color: rgb(120, 120, 120);
+        font-size: 18px;
+    }
+
+    button:focus {
+        outline: none;
+    }
+
+    .a50 {
+        height: 300px;
+    }
+
+    .last {
+        margin-bottom: 50px;
+    }
+
+    .a100 {
+        height: auto;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        padding: 25px;
+    }
+
+</style> 
