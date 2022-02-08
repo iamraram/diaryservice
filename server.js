@@ -48,11 +48,6 @@ app.post('/signup', function (req, res) {
             err: '양식에 맞춰 가입해주세요.'
         })
     }
-    else if ((req.body.age < 1922) || (req.body.age > 2022)){
-        res.render('resignup.ejs', {
-            err: '올바른 나이를 입력해주세요.'
-        })
-    }
     else if (req.body.pw != req.body.pw2) {
         res.render('resignup.ejs', {
             err: '비밀번호가 일치하지 않습니다.'
@@ -132,7 +127,10 @@ app.get('/exit', islogin, function(req, res){
 });
 
 app.get('/exitsuccess', islogin, function(req, res){
-    res.render('exitsuccess.ejs');
+    db.collection('user').deleteOne({ id: req.user.id }, function (err, result) {
+        req.logout()
+        res.render('exitsuccess.ejs');
+      });
 });
 
 app.get('/search', islogin, function(req, res){
@@ -163,47 +161,48 @@ app.post('/select-book', islogin, function(req, res){
 
 app.post('/add-post', islogin, function(req, res) {
 
-    let total = 0;
-
     db.collection('posts_amount').findOne(
         {
           names: '포스트 수'
         }, 
       
     function(err, result) {
-        total = result.amount;
-    });
+        let totalvalue = result.amount;
 
-    db.collection('posts').insertOne(
-        {
-            _id: this.total + 1,
-            user_name: req.user.id,
-            post_title: req.body.booktitle,
-            post_desc: req.body.post_desc,
-            book_title: req.body.book_title,
-            book_image: req.body.image_url,
-            like: 0,
-            comment: []
-        },
+        db.collection('posts_amount').updateOne(
+            { names: '포스트 수' },
+            { $inc: { amount: 1 } },
+            function (err, result) {
+                console.log('증가 완료')
+        });
 
-        function (err, result) {
+        db.collection('posts').insertOne(
+            {
+                _id: totalvalue + 1,
+                user_name: req.user.id,
+                post_title: req.body.booktitle,
+                post_desc: req.body.post_desc,
+                book_title: req.body.book_title,
+                image_url: req.body.image_url,
+                like: 0,
+            },
+            
+            function (err, result) {
+                console.log(result)
+                db.collection('user').findOne(
+                    {
+                        id: req.user.id
+                    },
 
-            db.collection('posts_amount').updateOne(
-                { name: '포스트 수' },
-                { $inc: { amount: 1 } },
-                function (err, result) {
-                    console.log('업로드 되었습니다.')
-                    db.collection('posts').find().toArray(function (err, result) {
-                        res.render('most-like-post.ejs', {
-                            posts: result
-                        });
+                    function(err, result) {
+                        const name = result.name;
+                        res.render('reload.ejs');
                     });
-                }
-            )
 
+                }
+            );
         }
     );
-
 });
 
 app.post('/write-post', function(req, res){
@@ -369,32 +368,38 @@ app.get('/:id', function(req, res){
     res.render('unknown.ejs')
 });
 
-app.get('/posts/:id', function (req, res) {
+app.get('/posts/:id', function (req, res) {   
     db.collection('posts').findOne(
-      {
-        _id: Number(req.params.id) + 1
-      },
-  
-      function (err, result) {
+    {
+        _id: Number(req.params.id)
+    },
+
+    function (err, result) {
         var _id = req.params.id;
-        var user_name = result.user_name;
-        var post_title = result.post_title;
-        var post_desc = result.post_desc;
-        var book_title = result.book_title;
-        var book_image = result.book_image;
-        var like = result.like;
-        var comment = result.comment;
+        try {
+            var user_name = result.user_name;
+            var post_title = result.post_title;
+            var post_desc = result.post_desc;
+            var book_title = result.book_title;
+            var image_url = result.image_url;
+            var like = result.like;
+            var comment = result.comment;
+        }
+        catch(e) {
+            res.render('404.ejs')
+        }
 
         res.render('posts-view.ejs', {
-          _id: _id,
-          user_name: user_name,
-          post_title: post_title,
-          post_desc: post_desc,
-          book_title: book_title,
-          book_image: book_image,
-          like: like,
-          comment: comment
+        _id: _id,
+        user_name: user_name,
+        post_title: post_title,
+        post_desc: post_desc,
+        book_title: book_title,
+        image_url: image_url,
+        like: like,
+        comment: comment
         });
-      });
-  });
+    });
+});
+
   

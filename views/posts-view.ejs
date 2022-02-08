@@ -30,7 +30,7 @@
             <div class="box a100">
                 <div class="book_item">
                     <div class="book_photo">
-                        <img src="<%= book_image %>" class="photo"></img>
+                        <img src="<%= image_url %>" class="photo"></img>
                     </div>
                     <div class="book_title">
                         <%= book_title %>
@@ -38,7 +38,7 @@
                 </div>
             </div>
 
-            <div class="box a100">
+            <div class="box a100 bigg">
                 <textarea type="text" name="post_desc" readonly><%= post_desc %></textarea>
             </div>
 
@@ -359,6 +359,10 @@
 
     .a100_2 {
         display: block;
+    }
+
+    .bigg {
+        margin-bottom: 60px;
     }
 
 </style> 

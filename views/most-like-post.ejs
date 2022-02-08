@@ -31,8 +31,7 @@
     <div class="parent">
 
         <div class="box a50">     
-
-            <% for(var i = 0; i < posts.length; i++){ %>
+            <% for(var i = (posts.length - 1); i >= 0; i--){ %>
                 <div class="a50_items" id="<%= i+1 %>" onclick="gogo(id)">
                     <div class="a50_post">
                         <%= posts[i].post_title %>
@@ -67,7 +66,8 @@
     }
 
     .parent {
-        width: 100%;
+        margin-left: 20px;
+        margin-right: 20px;
         display: flex;
         justify-content: center;
     }
@@ -312,7 +312,7 @@
     }
 
     .a50 {
-        width: 90%;
+        width: 100%;
         height: auto;
         justify-content: space-between;
         align-items: flex-start;
