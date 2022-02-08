@@ -162,37 +162,48 @@ app.post('/select-book', islogin, function(req, res){
 });
 
 app.post('/add-post', islogin, function(req, res) {
+
+    let total = 0;
+
     db.collection('posts_amount').findOne(
         {
           names: '포스트 수'
         }, 
       
-      function(err, result) {
-        var total = result.amount;
+    function(err, result) {
+        total = result.amount;
+    });
 
-        db.collection('posts').insertOne(
-            {
-                _id: total + 1,
-                user_name: req.user.id,
-                post_title: req.body.booktitle,
-                post_desc: req.body.post_desc,
-                book_title: req.body.book_title,
-                book_image: req.body.image_url,
-                like: 0,
-                comment: []
-            },
-    
-            function (err, result) {
-                db.collection('posts_amount').updateOne(
-                    { name: '포스트 수' },
-                    { $inc: { amount: 1 } },
-                    function (err, result) {
-                        console.log('업로드 되었습니다.')
-                        res.render('most-like-post.ejs');
-                    }
-                )
-            });
-      });
+    db.collection('posts').insertOne(
+        {
+            _id: this.total + 1,
+            user_name: req.user.id,
+            post_title: req.body.booktitle,
+            post_desc: req.body.post_desc,
+            book_title: req.body.book_title,
+            book_image: req.body.image_url,
+            like: 0,
+            comment: []
+        },
+
+        function (err, result) {
+
+            db.collection('posts_amount').updateOne(
+                { name: '포스트 수' },
+                { $inc: { amount: 1 } },
+                function (err, result) {
+                    console.log('업로드 되었습니다.')
+                    db.collection('posts').find().toArray(function (err, result) {
+                        res.render('most-like-post.ejs', {
+                            posts: result
+                        });
+                    });
+                }
+            )
+
+        }
+    );
+
 });
 
 app.post('/write-post', function(req, res){
@@ -292,7 +303,7 @@ app.get('/edit', islogin, function(req, res){
 
 
 app.get('/mypage', islogin, function (req, res) {
-    db.collection('user').findOne({ id: req.user.id }, function(err, result) {
+    db.collection('user').findOne({id: req.user.id }, function(err, result) {
         const name = result.name;
         const id = result.id;
         const age = result.age;
@@ -361,7 +372,7 @@ app.get('/:id', function(req, res){
 app.get('/posts/:id', function (req, res) {
     db.collection('posts').findOne(
       {
-        _id: Number(req.params.id)
+        _id: Number(req.params.id) + 1
       },
   
       function (err, result) {
