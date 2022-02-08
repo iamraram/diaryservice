@@ -6,52 +6,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HOME</title>
 </head>
-<body>
 
+<body>
     <div class="header">
         <div class="none">
-            <a href="/mypage">
+            <a href="/most-like-post">
                 <div class="profile"></div>
             </a>
-            <div class="name">최신 포스트</div>
+            <div class="name">
+                <%= user_name %>님의 게시물
+            </div>
         </div>
     </div>
-
     <div class="content">
+        <form action="/add-post" method="POST" name="frm">
 
-        <a href="/write-post">
             <div class="box a10">
-                <div class="search_pen imgs2"></div>
-                <div class="write_text">글 작성하기</div>
+                <div class="write_text">
+                    <%= post_title %>
+                </div>
             </div>
-        </a>
 
-    </div>
-
-    <div class="parent">
-
-        <div class="box a50">     
-
-            <% for(var i = 0; i < posts.length; i++){ %>
-                <div class="a50_items" id="<%= i+1 %>" onclick="gogo(id)">
-                    <div class="a50_post">
-                        <%= posts[i].post_title %>
+            <div class="box a100">
+                <div class="book_item">
+                    <div class="book_photo">
+                        <img src="<%= book_image %>" class="photo"></img>
                     </div>
-                    <div class="a50_writer">
-                        <%= posts[i].user_name %>
+                    <div class="book_title">
+                        <%= book_title %>
                     </div>
                 </div>
-            <% } %>
-        
-        </div>
+            </div>
 
-        <script>
+            <div class="box a100">
+                <textarea type="text" name="post_desc" readonly><%= post_desc %></textarea>
+            </div>
 
-            function gogo(value) {
-                location.href = '/posts/' + value
-            }
+        </form>
 
-        </script>
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 
     </div>
 
@@ -66,76 +59,96 @@
         font-family: 나눔스퀘어, 'NanumSquare', sans-serif; 
     }
 
-    .parent {
+    textarea {
+        font-family: 나눔스퀘어, 'NanumSquare', sans-serif; 
+        resize: none;
+        border: none;
+        width: 98%;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        font-size: 15px;
+        overflow: auto;
+        height: 650px;
+        line-height: 27px;
+    }
+
+    textarea::placeholder {
+        color: rgb(220, 220, 220);
+    }
+
+    textarea:focus {
+        outline: none;
+    }
+
+    .nones {
+        display: none;
+    }
+
+    .al {
         width: 100%;
+        justify-content: center;
         display: flex;
+        font-size: 14px;
+        color: gray;
+        margin-top: 25px;
+        margin-bottom: 25px;
+    }
+
+    .book_photo {
+        display: flex;
+        width: 80px;
+        margin-right: 20px;
+    }
+
+    .photo {
+        width: 80px;
+    }
+
+    .book_item {
+        width: 100%;
+        border-bottom: 1px solid rgb(220, 220, 220);
+        margin-top: 10px;
+        margin-bottom: 10px;
+        padding-bottom: 20px;
+        line-height: 28px;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+    }
+
+    .book_item:nth-last-child(1) {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .modal {
+        /* display: none; */
+    }
+
+
+    .modal_parent {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        bottom: 0;
+        z-index: 99999;
+        background-color: rgb(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
         justify-content: center;
     }
 
-    a {
-        text-decoration: none;
-        color: initial;
-    }
-
-    .go_post {
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-    }
-
-    .titles {
-        margin-bottom: 12px;
-    }
-
-    a {
-        text-decoration: none;
-    }
-
-    .a50_items {
-        display: flex;
-        width: 100%;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 9px;
-        margin-bottom: 9px;
-    }
-
-    .a50_writer {
-        color: gray;
-    }
-
-    .a50_title {
-        font-weight: 600;
-        font-size: 17.5px;
-        align-items: center;
-    }
-
-    .a50_subtitle {
-        display: flex;
-        font-weight: 400;
-        font-size: 14px;
-        color: rgb(180, 180, 180);
-        background-image: url("/images/back.png");
-        background-repeat: no-repeat;
-        background-size: 80%;
-        background-position: center;
-        width: 15px;
-        height: 15px;
-        transform: rotateY(180deg);
-        opacity: 0.5;
-        position: relative;
-        top: 2px;
-    }
-
-    .search_pen {
-        width: 30px;
-        height: 30px;
-        background-image: url("/images/pen.png");
+    .modal_child {
+        width: 90%;
+        height: 520px;
+        background-color: white;
+        border-radius: 20px;
+        border: 1px solid rgb(220, 220, 220)
     }
 
     input::placeholder {
-        color: rgb(120, 120, 120);
+        color: rgb(200, 200, 200);
+        font-family: 나눔스퀘어, 'NanumSquare', sans-serif; 
     }
 
     input:focus {
@@ -143,25 +156,24 @@
     }
 
     input {
+        font-family: 나눔스퀘어, 'NanumSquare', sans-serif; 
         border: 0;
-        font-size: 18px;
+        font-size: 17px;
         position: relative;
         bottom: 1px;
+        width: 220px;
+        position: relative;
+        top: 0.5px;
+    }
+
+    .search_pen {
+        width: 30px;
+        height: 30px;
+        background-image: url("/images/search.png");
     }
 
     a {
         text-decoration: none;
-    }
-
-    .no {
-        text-align: center;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: gray;
-        line-height: 30px;
     }
 
     .bookmark_pen {
@@ -206,7 +218,7 @@
         background-repeat: no-repeat;
         background-size: 100%;
         background-position: 5% center;
-        margin-right: 13px;
+        margin-right: 15px;
         opacity: 0.5;
     }
 
@@ -218,6 +230,8 @@
 
     .write_text {
         font-size: 18px;
+        width: 100%;
+        color: black;
     }
 
     div {
@@ -278,8 +292,7 @@
     }
 
     .name {
-        font-size: 19px;
-        font-weight: 600;
+        font-size: 17px;
     }
 
     .content {
@@ -307,22 +320,45 @@
         display: flex;
         flex-direction: row;
         justify-content: flex-start;
+        align-items: center;
         padding-left: 20px;
         color: rgb(120, 120, 120);
     }
 
+    .a5 {
+        height: 65px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        color: rgb(120, 120, 120);
+        font-size: 18px;
+    }
+
+    button:focus {
+        outline: none;
+    }
+
     .a50 {
-        width: 90%;
-        height: auto;
-        justify-content: space-between;
-        align-items: flex-start;
-        flex-direction: column;
-        padding: 20px;
+        height: 300px;
     }
 
     .last {
         margin-bottom: 50px;
-        background-color: rgb(255, 243, 243);
+    }
+
+    .a100 {
+        height: auto;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        padding: 25px;
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+
+
+    .a100_2 {
+        display: block;
     }
 
 </style> 

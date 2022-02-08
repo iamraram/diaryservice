@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HOME</title>
 </head>
+
 <body>
     <div class="header">
         <div class="none">
@@ -16,23 +17,16 @@
         </div>
     </div>
     <div class="content">
-        <form action="/write-post" method="POST" name="frm">
+        <form action="/select-book" method="POST" name="frm">
 
             <div class="box a10">
                 <div class="write_text">글 제목</div>
-                <input type="text" placeholder="글 제목을 입력해주세요" value="<%= title %>"/>
+                <input type="text" placeholder="글 제목을 입력해주세요" value="<%= title %>" name="booktitle" />
             </div>
-
-            <div class="box a10">
-                <div class="write_text">추천 책</div>
-                <input type="text" placeholder="클릭하면 검색합니다" name="bookname" value="<%= b_name %>">
-            </div>
-
-            <br />
 
             <div class="box a100">
                 <% for(var i = 0; i < len; i ++){ %>
-                    <div class="book_item">
+                    <div class="book_item value<%= i %>" id="value<%= i %>|<%= data[i].image_url %>|<%= data[i].title %>" onclick="clicksss(id)">
                         <div class="book_photo">
                             <img src="<%= data[i].image_url %>" class="photo"></img>
                         </div>
@@ -43,15 +37,40 @@
                 <% } %>
             </div>
 
+            <script>
+                function clicksss(id) {  
+                    const a = (String(id)).split('|') 
+                    const b = document.querySelectorAll('div.book_item')
+
+                    for (i = 0; i < b.length; i ++) {
+                        b[i].style.fontWeight = '500';
+                        b[i].style.fontSize = '16px';
+                        b[i].style.color = 'gray';
+                    }
+
+                    document.querySelector('.' + a[0]).style.fontWeight = '600';
+                    document.querySelector('.' + a[0]).style.color = 'black';
+
+                    document.querySelector('.last').style.display = 'flex';
+                    document.querySelector('.lis').style.marginBottom = '0px';
+
+                    document.querySelector('.new_image_url').value = a[1];
+                    document.querySelector('.new_title').value = a[2];
+                    console.log(id);
+                }
+            </script>
 
             <div class="al">
                 검색결과가 나오지 않을 경우 구체적으로 검색해보세요.
             </div>
 
+            <input type="text" class="nones new_image_url" name="new_image_url" readonly />
+            <input type="text" class="nones new_title" name="new_title" readonly />
+
             <a href="/write-post">
-                <button class="buttons box a5" type="button">다시 검색하기</button>
+                <button class="buttons box a5 lis" type="button">다시 검색하기</button>
             </a>
-            <button class="buttons box a5 last" type="submit">선택하기</button>
+            <button class="buttons box a5 last" type="submit" style="display: none;">선택하기</button>
 
         </form>
 
@@ -77,6 +96,10 @@
         font-family: 나눔스퀘어, 'NanumSquare', sans-serif; 
     }
 
+    .nones {
+        display: none;
+    }
+
     .al {
         width: 100%;
         justify-content: center;
@@ -89,7 +112,7 @@
 
     .book_photo {
         display: flex;
-        width: 100px;
+        width: 80px;
         margin-right: 20px;
     }
 
@@ -100,6 +123,7 @@
     .book_item {
         width: 100%;
         border-bottom: 1px solid rgb(220, 220, 220);
+        background-color: white;
         margin-top: 10px;
         margin-bottom: 10px;
         padding-bottom: 20px;
@@ -345,6 +369,18 @@
         display: flex;
         flex-direction: column;
         padding: 25px;
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+
+
+    .a100_2 {
+        display: block;
+    }
+
+
+    .lis {
+        margin-bottom: 50px;
     }
 
 </style> 

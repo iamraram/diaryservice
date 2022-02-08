@@ -140,11 +140,59 @@ app.get('/search', islogin, function(req, res){
 });
 
 app.get('/most-like-post', islogin, function(req, res){
-    res.render('most-like-post.ejs');
+    db.collection('posts').find().toArray(function (err, result) {
+        res.render('most-like-post.ejs', {
+            posts: result
+        });
+    });
 });
 
 app.get('/write-post', islogin, function(req, res){
     res.render('write-post.ejs');
+});
+
+app.post('/select-book', islogin, function(req, res){
+    const a = (String(req.body.new_image_url)).split(' ')
+    // console.log(a)
+    res.render('select-book.ejs', {
+        title: req.body.booktitle,
+        image_url: req.body.new_image_url,
+        book_title: req.body.new_title,
+    });
+});
+
+app.post('/add-post', islogin, function(req, res) {
+    db.collection('posts_amount').findOne(
+        {
+          names: '포스트 수'
+        }, 
+      
+      function(err, result) {
+        var total = result.amount;
+
+        db.collection('posts').insertOne(
+            {
+                _id: total + 1,
+                user_name: req.user.id,
+                post_title: req.body.booktitle,
+                post_desc: req.body.post_desc,
+                book_title: req.body.book_title,
+                book_image: req.body.image_url,
+                like: 0,
+                comment: []
+            },
+    
+            function (err, result) {
+                db.collection('posts_amount').updateOne(
+                    { name: '포스트 수' },
+                    { $inc: { amount: 1 } },
+                    function (err, result) {
+                        console.log('업로드 되었습니다.')
+                        res.render('most-like-post.ejs');
+                    }
+                )
+            });
+      });
 });
 
 app.post('/write-post', function(req, res){
@@ -193,8 +241,6 @@ app.post('/write-post', function(req, res){
           return data;
         })
         .then(result => {
-
-            console.log(result)
             
             let lengths = result.length
 
@@ -204,8 +250,6 @@ app.post('/write-post', function(req, res){
             else if (result.length >= 10) {
                 lengths == 10
             }
-
-            console.log(lengths)
 
             res.render('find-book.ejs', {
                 data: result,
@@ -313,4 +357,33 @@ passport.deserializeUser(function (input_id, done) {
 app.get('/:id', function(req, res){
     res.render('unknown.ejs')
 });
+
+app.get('/posts/:id', function (req, res) {
+    db.collection('posts').findOne(
+      {
+        _id: Number(req.params.id)
+      },
+  
+      function (err, result) {
+        var _id = req.params.id;
+        var user_name = result.user_name;
+        var post_title = result.post_title;
+        var post_desc = result.post_desc;
+        var book_title = result.book_title;
+        var book_image = result.book_image;
+        var like = result.like;
+        var comment = result.comment;
+
+        res.render('posts-view.ejs', {
+          _id: _id,
+          user_name: user_name,
+          post_title: post_title,
+          post_desc: post_desc,
+          book_title: book_title,
+          book_image: book_image,
+          like: like,
+          comment: comment
+        });
+      });
+  });
   
