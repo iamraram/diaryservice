@@ -184,6 +184,7 @@ app.post('/add-post', islogin, function(req, res) {
                 post_desc: req.body.post_desc,
                 book_title: req.body.book_title,
                 image_url: req.body.image_url,
+                views: 0,
                 like: 0,
             },
             
@@ -302,19 +303,18 @@ app.get('/edit', islogin, function(req, res){
 
 
 app.get('/mypage', islogin, function (req, res) {
-    db.collection('user').findOne({id: req.user.id }, function(err, result) {
-        const name = result.name;
-        const id = result.id;
-        const age = result.age;
-        const school = result.school;
+    db.collection('user').findOne( { id: req.user.id },
+        function(err, result) {
+            const name = result.name;
 
-        res.render('mypage.ejs', {
-            name: name,
-            id: id,
-            age: age,
-            school: school
-        });
-    });
+            db.collection('posts').find().toArray(function (err, result) {
+                res.render('mypage.ejs', {
+                    posts: result,
+                    name: name,
+                });
+            });
+        }
+    );
 });
 
 function islogin(req, res, next) {
@@ -368,38 +368,47 @@ app.get('/:id', function(req, res){
     res.render('unknown.ejs')
 });
 
-app.get('/posts/:id', function (req, res) {   
-    db.collection('posts').findOne(
-    {
-        _id: Number(req.params.id)
-    },
+app.get('/posts/:id', function (req, res) {  
 
-    function (err, result) {
-        var _id = req.params.id;
-        try {
-            var user_name = result.user_name;
-            var post_title = result.post_title;
-            var post_desc = result.post_desc;
-            var book_title = result.book_title;
-            var image_url = result.image_url;
-            var like = result.like;
-            var comment = result.comment;
-        }
-        catch(e) {
-            res.render('404.ejs')
-        }
-
-        res.render('posts-view.ejs', {
-        _id: _id,
-        user_name: user_name,
-        post_title: post_title,
-        post_desc: post_desc,
-        book_title: book_title,
-        image_url: image_url,
-        like: like,
-        comment: comment
-        });
+    db.collection('posts').updateOne(
+        { _id: req.params.id },
+        { $inc: { views: 1 } },
+        function (err, result) {
+            db.collection('posts').findOne(
+                {
+                    _id: Number(req.params.id)
+                },
+            
+                function (err, result) {
+                    var _id = req.params.id;
+                    try {
+                        var user_name = result.user_name;
+                        var post_title = result.post_title;
+                        var post_desc = result.post_desc;
+                        var book_title = result.book_title;
+                        var image_url = result.image_url;
+                        var like = result.like;
+                        var views = result.views;
+                        var comment = result.comment;
+                    }
+                    catch(e) {
+                        res.render('404.ejs')
+                    }
+            
+                    res.render('posts-view.ejs', {
+                    _id: _id,
+                    user_name: user_name,
+                    post_title: post_title,
+                    post_desc: post_desc,
+                    book_title: book_title,
+                    image_url: image_url,
+                    like: like,
+                    views: views,
+                    comment: comment
+                    });
+                });
     });
+
 });
 
   
