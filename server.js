@@ -222,6 +222,7 @@ app.post('/write-post', function(req, res){
                 let ulList = [];
                 const $ = cheerio.load(html.data);
                 const $bodyList = $("div#keyword_wrap")
+
                                     .children("table")
                                     .children("tbody")
                                     .children("tr")
@@ -371,7 +372,7 @@ app.get('/:id', function(req, res){
 app.get('/posts/:id', function (req, res) {  
 
     db.collection('posts').updateOne(
-        { _id: req.params.id },
+        { _id: Number(req.params.id) },
         { $inc: { views: 1 } },
         function (err, result) {
             db.collection('posts').findOne(
@@ -394,17 +395,20 @@ app.get('/posts/:id', function (req, res) {
                     catch(e) {
                         res.render('404.ejs')
                     }
-            
+
+                    console.log(req.user.id)
+
                     res.render('posts-view.ejs', {
-                    _id: _id,
-                    user_name: user_name,
-                    post_title: post_title,
-                    post_desc: post_desc,
-                    book_title: book_title,
-                    image_url: image_url,
-                    like: like,
-                    views: views,
-                    comment: comment
+                        _id: _id,
+                        user_name: user_name,
+                        post_title: post_title,
+                        post_desc: post_desc,
+                        book_title: book_title,
+                        image_url: image_url,
+                        like: like,
+                        views: views,
+                        comment: comment,
+                        using_user: req.user.id
                     });
                 });
     });

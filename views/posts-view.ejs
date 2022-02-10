@@ -15,7 +15,12 @@
                     <div class="profile"></div>
                 </a>
                 <div class="name">
-                    <%= user_name %>님의 게시물
+                    <span class="isme" style="display: none;">
+                        나의 게시물
+                    </span>
+                    <span class="notme" style="display: none;">
+                        <%= user_name %>님의 게시물
+                    </span>
                 </div>
             </div>
             <div class="te_b">
@@ -35,9 +40,7 @@
                 <div class="write_text">
                     <%= post_title %>
                 </div>
-                <div class="heart">
-
-                </div>
+                <div class="heart" style="display: none;"></div>
             </div>
 
             <div class="box a100">
@@ -67,11 +70,38 @@
                 <textarea type="text" name="post_desc" readonly></textarea>
             </div>
 
+            <div class="al" style="display: none;">
+                <div class="aaa">
+                    수정하기
+                </div>
+                <div class="aaa">
+                    삭제하기
+                </div>
+            </div>
+
+            <div class="al2" style="display: none;">
+                이 게시물 신고하기
+            </div>
+
         </form>
 
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 
     </div>
+
+    <script>
+        window.onload = function() {
+            if (`<%= using_user %>` !== `<%= user_name %>`) {
+                document.querySelector('.heart').style.display = 'flex';
+                document.querySelector('.notme').style.display = 'block';
+                document.querySelector('.al2').style.display = 'flex';
+            }
+            if (`<%= using_user %>` === `<%= user_name %>`) {
+                document.querySelector('.al').style.display = 'flex';
+                document.querySelector('.isme').style.display = 'block';
+            }
+        }
+    </script>
 
 </body>
 </html>
@@ -82,6 +112,11 @@
 
     body {
         font-family: 나눔스퀘어, 'NanumSquare', sans-serif; 
+    }
+
+    .aaa {
+        margin-left: 20px;
+        margin-right: 20px;
     }
 
     .comment_amount {
@@ -114,16 +149,6 @@
 
     .nones {
         display: none;
-    }
-
-    .al {
-        width: 100%;
-        justify-content: center;
-        display: flex;
-        font-size: 14px;
-        color: gray;
-        margin-top: 25px;
-        margin-bottom: 25px;
     }
 
     .book_photo {
@@ -436,5 +461,26 @@
         flex-direction: row;
         align-items: center;
     }
+
+    .al {
+        width: 100%;
+        justify-content: center;
+        display: flex;
+        font-size: 14px;
+        color: gray;
+        margin-top: 25px;
+        margin-bottom: 60px;
+    }
+
+    .al2 {
+        width: 100%;
+        justify-content: center;
+        display: flex;
+        font-size: 14px;
+        color: gray;
+        margin-top: 25px;
+        margin-bottom: 60px;
+    }
+
 
 </style> 

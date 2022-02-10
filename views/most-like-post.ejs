@@ -33,11 +33,24 @@
         <div class="box a50">     
             <% for(var i = (posts.length - 1); i >= 0; i--){ %>
                 <div class="a50_items" id="<%= i+1 %>" onclick="gogo(id)">
-                    <div class="a50_post">
-                        <%= posts[i].post_title %>
+                    <div class="line_first">
+                        <div class="a50_post">
+                           <%= posts[i].post_title %>
+                        </div>
+                        <div class="a50_writer">
+                            <%= posts[i].user_name %>
+                        </div>
                     </div>
-                    <div class="a50_writer">
-                        <%= posts[i].user_name %>
+                    <div class="line_first">
+                        <div class="a50_writer w1">
+                            좋아요 <%= posts[i].like %>
+                        </div>
+                        <div class="a50_writer w2">
+                            조회수 <%= posts[i].views %>
+                        </div>
+                        <div class="a50_writer w2 bold">
+                            댓글 0
+                        </div>
                     </div>
                 </div>
             <% } %>
@@ -63,6 +76,10 @@
 
     body {
         font-family: 나눔스퀘어, 'NanumSquare', sans-serif; 
+    }
+
+    .bold {
+        font-weight: 700;
     }
 
     .parent {
@@ -99,10 +116,24 @@
         align-items: center;
         margin-top: 9px;
         margin-bottom: 9px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid rgb(220, 220, 220);
+    }
+
+    .a50_items:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: 0;
+    }
+
+    .a50_items:first-child {
+        margin-top: 0;
+        padding-top: 0;
     }
 
     .a50_writer {
-        color: gray;
+        margin-top: 7px;
+        color: rgb(180, 180, 180);
     }
 
     .a50_title {
@@ -323,6 +354,17 @@
     .last {
         margin-bottom: 50px;
         background-color: rgb(255, 243, 243);
+    }
+
+    .w2 {
+        font-size: 13px;
+        text-align: right;
+    }
+
+    .w1 {
+        font-size: 13px;
+        text-align: right;
+        margin-top: 0;
     }
 
 </style> 
