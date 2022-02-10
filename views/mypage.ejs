@@ -26,17 +26,17 @@
             </div>
         </a>
 
-        <div class="box a50 last">
+        <div class="box a50">
             <div class="a50_items titles">
                 <a href="/most-like-post" class="go_post">
                 <div class="a50_title">
-                    최신 포스트
+                    최신 포스트 - 5개
                 </div>
                 <div class="a50_subtitle"></div>
                 </a>
             </div>     
 
-            <% for(var i = (posts.length - 1); i >= 0; i--){ %>
+            <% for(var i = (posts.length - 1); i >= (posts.length - 5); i--){ %>
                 <a class="a50_items" href="/posts/<%= posts[i]._id %>" >
                     <div class="a50_post">
                         <%= posts[i].post_title %>
@@ -48,6 +48,78 @@
             <% } %>
             
         </div>
+
+        <div class="box a55">
+            <div class="a50_items titles">
+                <a href="/most-view-post" class="go_post">
+                <div class="a50_title">
+                    많은 사람들이 본 포스트
+                </div>
+                <div class="a50_subtitle"></div>
+                </a>
+            </div>     
+            
+        </div>
+
+        <div class="box a55">
+            <div class="a50_items titles">
+                <a href="/most-like-post" class="go_post">
+                <div class="a50_title">
+                    많은 사람들이 좋아한 포스트
+                </div>
+                <div class="a50_subtitle"></div>
+                </a>
+            </div>    
+        </div>
+
+        <div class="box a55">
+            <div class="a50_items titles">
+                <a href="/most-like-post" class="go_post">
+                <div class="a50_title">
+                    내가 좋아요 누른 포스트
+                </div>
+                <div class="a50_subtitle"></div>
+                </a>
+            </div>    
+        </div>
+
+        <div class="box a55">
+            <div class="a50_items titles">
+                <a href="/most-like-post" class="go_post">
+                <div class="a50_title">
+                    내가 작성한 포스트
+                </div>
+                <div class="a50_subtitle"></div>
+                </a>
+            </div>    
+        </div>
+
+        <div class="box a55">
+            <div class="a50_items titles">
+                <a href="/most-like-post" class="go_post">
+                <div class="a50_title">
+                    리커맨드북이 추천하는 포스트
+                </div>
+                <div class="a50_subtitle"></div>
+                </a>
+            </div>    
+        </div>
+
+        <div class="box a55 last">
+            <div class="a50_items titles">
+                <a href="/most-like-post" class="go_post">
+                <div class="a50_title">
+                    조회수 대비 좋아요가 많은 포스트
+                </div>
+                <div class="a50_subtitle"></div>
+                </a>
+            </div>    
+        </div>
+
+        <div class="al">
+            개발자: 이하람
+        </div>
+    
     </div>
 </body>
 </html>
@@ -64,6 +136,15 @@
     a {
         text-decoration: none;
         color: initial;
+    }
+
+    .al {
+        width: 100%;
+        color: rgb(180, 180, 180);
+        display: flex;
+        justify-content: center;
+        margin-bottom: 50px;
+        font-size: 14px;
     }
 
     .go_post {
@@ -240,11 +321,23 @@
     }
 
     .a50 {
-        height: 180px;
+        height: 250px;
         justify-content: space-between;
         align-items: flex-start;
         flex-direction: column;
         padding: 20px;
+        margin-top: 10px;
+        margin-bottom: 5px;
+    }
+
+    .a55 {
+        height: 60px;
+        justify-content: space-between;
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 20px;
+        margin-top: 5px;
+        margin-bottom: 5px;
     }
 
     .last {

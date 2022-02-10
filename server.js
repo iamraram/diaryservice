@@ -145,6 +145,22 @@ app.get('/most-like-post', islogin, function(req, res){
     });
 });
 
+app.get('/most-view-post', islogin, function(req, res){
+    db.collection('posts').find().toArray(function (err, result) {
+        function customSort(a, b) {
+            if (a.views == b.views){
+                return 0
+            }
+            return a.views > b.views ? 1 : -1;
+        }
+        
+        var viewsort = result.sort(customSort);
+        res.render('most-view.ejs', {
+            viewsort: viewsort
+        });
+    });
+});
+
 app.get('/write-post', islogin, function(req, res){
     res.render('write-post.ejs');
 });
@@ -309,8 +325,19 @@ app.get('/mypage', islogin, function (req, res) {
             const name = result.name;
 
             db.collection('posts').find().toArray(function (err, result) {
+                var posts = result;
+                function customSort(a, b) {
+                    if (a.total == b.total){
+                        return 0
+                    }
+                    return a.total > b.total ? 1 : -1;
+                }
+                
+                var viewsort = result.sort(customSort);
+
                 res.render('mypage.ejs', {
-                    posts: result,
+                    posts: posts,
+                    viewsort: viewsort,
                     name: name,
                 });
             });
@@ -360,8 +387,8 @@ passport.serializeUser(function (user, done) {
   
 passport.deserializeUser(function (input_id, done) {
     db.collection('user').findOne({ id: input_id },
-    function (에러, 결과) {
-      done(null, 결과)
+    function (err, result) {
+      done(null, result)
     })
 }); 
 
@@ -395,8 +422,6 @@ app.get('/posts/:id', function (req, res) {
                     catch(e) {
                         res.render('404.ejs')
                     }
-
-                    console.log(req.user.id)
 
                     res.render('posts-view.ejs', {
                         _id: _id,
