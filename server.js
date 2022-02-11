@@ -398,6 +398,7 @@ app.get('/:id', function(req, res){
 });
 
 app.post('/posts/:id', function (req, res) { 
+    console.log('댓글 다는 post 요청 발생')
     db.collection('posts').updateOne(
         { _id: Number(req.body.params) }, 
         { $push: { comment: {

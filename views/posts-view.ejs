@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width" />
     <title>HOME</title>
 </head>
 
@@ -136,7 +137,7 @@
 
             <div class="box a50">
                 <textarea type="text" class="comment_title" placeholder="댓글을 입력해주세요" name="comment_title"></textarea>
-                <button class="comment_btn" onclick="doing()">댓글 달기</button>
+                <button class="comment_btn" onclick="doing()" style="color:rgb(100, 100, 100)">댓글 달기</button>
             </div>
 
             <% for(i = 0; i < (comment.length); i ++) { %>
@@ -155,7 +156,18 @@
             <script>
 
                 function doing() {
-                    alert('댓글이 성공적으로 달렸어요.');
+                    var comment = $('.comment_title').val();
+
+                    if (comment !== '') {
+                        alert('댓글이 등록됐어요.')
+                    }
+                    else {
+                        not('댓글 내용을 입력해주세요.')
+                    }
+                }
+
+                $('.comment_btn').click(function(event_) {
+
                     var comment = $('.comment_title').val();
 
                     $.ajax({
@@ -168,10 +180,9 @@
                             comment: comment
                         },
                     })
-
-                    document.querySelector('.comment_title').value = ''
+                    
                     location.reload();
-                }
+                });
 
               </script>
 
@@ -218,6 +229,10 @@
 
     body {
         font-family: 나눔스퀘어, 'NanumSquare', sans-serif; 
+    }
+
+    a {
+        color: white;
     }
 
     .comment_item {
@@ -623,6 +638,9 @@
     }
 
     .comment_title {
+        text-align: left;
+        display: flex;
+        justify-content: flex-start;
         line-height: 25px;
         margin-top: 0;
         margin-bottom: 0;
