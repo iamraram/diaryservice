@@ -7,6 +7,7 @@ const session = require('express-session');
 
 const axios = require("axios");
 const cheerio = require("cheerio");
+const crypto = require('crypto');
 
 const app = express();
 
@@ -30,6 +31,7 @@ MongoClient.connect('mongodb+srv://slyram06:lee146906@cluster0.fzore.mongodb.net
 
   app.listen((process.env.PORT || 8080) , function () {
     console.log('listening on 8080')
+    console.log(crypto.createHash('sha512').update('lee146906').digest('base64'))
   });
 
 });
@@ -64,7 +66,7 @@ app.post('/signup', function (req, res) {
                 db.collection('user').insertOne(
                     {
                         id: req.body.id,
-                        pw: req.body.pw,
+                        pw: crypto.createHash('sha512').update(req.body.pw).digest('base64'),
                         name: req.body.name,
                         school: req.body.school,
                         age: req.body.age,
@@ -78,7 +80,6 @@ app.post('/signup', function (req, res) {
                     },
             
                     function (err, result) {
-                        console.log('1명의 회원가입이 완료되었습니다.')
                         res.render('signupsuccess.ejs')
                     })
             }
@@ -98,6 +99,13 @@ app.get('/fail', islogin2, function(req, res){
     res.render('fail.ejs')
 });
 
+app.post('/login_a', function(req, res){
+    res.render('login_a.ejs', {
+        id: req.body.id,
+        pw: crypto.createHash('sha512').update(req.body.pw).digest('base64')
+    })
+});
+
 app.post('/login', passport.authenticate('local', {failureRedirect : '/fail'}), function(req, res){
     res.render('success.ejs', {
         names: req.body.id
@@ -106,7 +114,9 @@ app.post('/login', passport.authenticate('local', {failureRedirect : '/fail'}), 
 
 function islogin2(req, res, next) {
     if (req.user) {
-        res.render('already.ejs');
+        res.render('success.ejs', {
+            names: req.user.id
+        })
     }
     else {
         next()
@@ -167,7 +177,6 @@ app.get('/write-post', islogin, function(req, res){
 
 app.post('/select-book', islogin, function(req, res){
     const a = (String(req.body.new_image_url)).split(' ')
-    // console.log(a)
     res.render('select-book.ejs', {
         title: req.body.booktitle,
         image_url: req.body.new_image_url,
@@ -187,10 +196,8 @@ app.post('/add-post', islogin, function(req, res) {
 
         db.collection('posts_amount').updateOne(
             { names: '포스트 수' },
-            { $inc: { amount: 1 } },
-            function (err, result) {
-                console.log('증가 완료')
-        });
+            { $inc: { amount: 1 } }
+        );
 
         db.collection('posts').insertOne(
             {
@@ -202,10 +209,10 @@ app.post('/add-post', islogin, function(req, res) {
                 image_url: req.body.image_url,
                 views: 0,
                 like: 0,
+                comment: []
             },
             
             function (err, result) {
-                console.log(result)
                 db.collection('user').findOne(
                     {
                         id: req.user.id
@@ -303,11 +310,6 @@ app.get('/edit', islogin, function(req, res){
         const age = result.age;
         const school = result.school;
 
-        for (i = 0; i < (result.pw).length, i ++;) {
-            pw += '*'
-            console.log('*')
-        }
-
         res.render('edit.ejs', {
             name: name,
             id: id,
@@ -359,9 +361,8 @@ passport.use(new LocalStrategy({
     passwordField: 'pw',
     session: true,
     passReqToCallback: false,
-  }, function (input_id, input_pw, done) {
-
-    console.log(input_id, input_pw);
+  },
+  function (input_id, input_pw, done) {
 
     db.collection('user').findOne({ id: input_id }, function (err, result) {
       if (err) {
@@ -396,6 +397,17 @@ app.get('/:id', function(req, res){
     res.render('unknown.ejs')
 });
 
+app.post('/posts/:id', function (req, res) { 
+    db.collection('posts').updateOne(
+        { _id: Number(req.body.params) }, 
+        { $push: { comment: {
+            write_user: req.body.write_user,
+            comment: req.body.comment
+        }}
+        }
+    )
+});
+
 app.get('/posts/:id', function (req, res) {  
 
     db.collection('posts').updateOne(
@@ -410,6 +422,7 @@ app.get('/posts/:id', function (req, res) {
                 function (err, result) {
                     var _id = req.params.id;
                     try {
+                        var params = req.params.id;
                         var user_name = result.user_name;
                         var post_title = result.post_title;
                         var post_desc = result.post_desc;
@@ -431,12 +444,15 @@ app.get('/posts/:id', function (req, res) {
                         book_title: book_title,
                         image_url: image_url,
                         like: like,
+                        params: params,
                         views: views,
                         comment: comment,
                         using_user: req.user.id
                     });
-                });
-    });
+                }
+            );  
+        }
+    );
 
 });
 

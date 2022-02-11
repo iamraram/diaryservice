@@ -1,0 +1,19 @@
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+<script>
+
+    window.onload = function() {
+        $.ajax({
+            method: 'POST',
+            url: '/login',
+            data: {
+                id: `<%= id %>`,
+                pw: `<%= pw %>`,
+            },
+            success: function(data) {
+                location.replace('/login')
+            }
+        })
+    }
+
+  </script>
