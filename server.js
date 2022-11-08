@@ -21,7 +21,7 @@ app.set('view engine', 'ejs')
 
 var db;
 
-MongoClient.connect('mongodb+srv://slyram06:lee146906@cluster0.fzore.mongodb.net/Cluster0?retryWrites=true&w=majority', function(err, client) {
+MongoClient.connect('mongodb+srv://slyram06:*********@cluster0.fzore.mongodb.net/Cluster0?retryWrites=true&w=majority', function(err, client) {
 
   if (err) {
     return console.log(err)
